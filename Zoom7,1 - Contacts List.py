@@ -34,14 +34,7 @@ def update():
     print(contacts)
 
 
-def show(event):
-    curname = shown_contacts.selection_get()
-    name_E.insert(tkinter.END, curname)
-    add_E.insert(tkinter.END, contacts[curname][0])
-    mob_E.insert(tkinter.END, contacts[curname][1])
-    email_E.insert(tkinter.END, contacts[curname][2])
-    birth_E.insert(tkinter.END, contacts[curname][3])
-
+def show():
     curname = shown_contacts.selection_get()
 
     name = curname
@@ -53,7 +46,22 @@ def show(event):
     contact_info = f"{name}\n {add}\n {mob}\n {email}\n {birth}"
 
     tkinter.messagebox.showinfo("Contact Detail", contact_info)
+
+
+def edit(event):
+
+    name_E.delete(0, tkinter.END)
+    add_E.delete(0, tkinter.END)
+    mob_E.delete(0, tkinter.END)
+    email_E.delete(0, tkinter.END)
+    birth_E.delete(0, tkinter.END)
     
+    curname = shown_contacts.selection_get()
+    name_E.insert(tkinter.END, curname)
+    add_E.insert(tkinter.END, contacts[curname][0])
+    mob_E.insert(tkinter.END, contacts[curname][1])
+    email_E.insert(tkinter.END, contacts[curname][2])
+    birth_E.insert(tkinter.END, contacts[curname][3])
 
 
 def delete():
@@ -76,7 +84,7 @@ def load():
     if contacts_file is not None:
         content = contacts_file.readline()
         contacts = eval(content)  ## Convert text to list, dict, etc.
-    update()
+    update_listbox()
 
     
 
@@ -86,9 +94,9 @@ open_btn = tkinter.Button(screen, text="Open", command=load)
 
 shown_contacts = tkinter.Listbox(screen)  # Listbox
 
-shown_contacts.bind("<<ListboxSelect>>", show)
+shown_contacts.bind("<<ListboxSelect>>", edit)
 
-edit_btn = tkinter.Button(screen, text="Show", command=show)
+show_btn = tkinter.Button(screen, text="Show", command=show)
 del_btn = tkinter.Button(screen, text="Delete", command=delete)
 name_L = tkinter.Label(screen, text="Name:")
 add_L = tkinter.Label(screen, text="Address:")
@@ -112,7 +120,7 @@ add_L.grid(row=2, column=2)
 mob_L.grid(row=3, column=2)
 email_L.grid(row=4, column=2)
 birth_L.grid(row=5, column=2)
-edit_btn.grid(row=6, column=0)
+show_btn.grid(row=6, column=0)
 del_btn.grid(row=6, column=1)
 update_btn.grid(row=6, column=3)
 save_btn.grid(row=7, column=1, columnspan=2)
